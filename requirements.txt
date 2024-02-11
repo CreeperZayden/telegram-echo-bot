@@ -1,2 +1,2 @@
-aiogram==2.23.1
+python-telegram-bot==13.7
 flask
