@@ -1,8 +1,11 @@
 import os
 from telegram.ext import Updater, CommandHandler
 
+# Get your bot token from environment variables
+token = os.environ.get('token')
+
 # Initialize the bot
-updater = Updater(token=os.environ.get('YOUR_BOT_TOKEN'), use_context=True)
+updater = Updater(token=token, use_context=True)
 
 # Define command handlers
 def start(update, context):
@@ -34,7 +37,27 @@ def send_codes(update, context):
     codes_text = """
     NEWTROLL: Redeem for a 20 minutes of 2x EXP Boost
     KITT_RESET: Redeem for a Stat Refund or Reset
-    ...
+    Sub2CaptainMaui: Redeem for 20 minutes of 2x EXP Boost
+    SUB2GAMERROBOT_RESET1: Redeem for a free Stat Reset
+    kittgaming: Redeem for 20 minutes of 2x EXP Boost
+    Sub2Fer999: Redeem for 20 minutes of 2x EXP Boost
+    Enyu_is_Pro: Redeem for 20 minutes of 2x EXP Boost
+    Magicbus: Redeem for 20 minutes of 2x EXP Boost
+    JCWK: Redeem for 20 minutes of 2x EXP Boost
+    Starcodeheo: Redeem for 20 minutes of 2x EXP Boost
+    Bluxxy: Redeem for a Boost
+    fudd10_v2: Redeem code for 2 Beli
+    FUDD10: Redeem code for $1
+    BIGNEWS: Redeem code for an in-game title
+    THEGREATACE: Redeem code for 20 Minutes of 2x Experience
+    SUB2GAMERROBOT_EXP1: Redeem for 30 Minutes of 2x Experience
+    Sub2OfficialNoobie: Redeem code for 20 Minutes of 2x Experience
+    StrawHatMaine: Redeem for 20 minutes of 2x Experience
+    SUB2NOOBMASTER123: Redeem code for 15 Minutes of 2x Experience
+    Sub2UncleKizaru: Redeem code for a Stat Refund
+    Sub2Daigrock: Redeem code for 15 Minutes of 2x Experience
+    Axiore: Redeem code for 20 Minutes of 2x Experience
+    TantaiGaming: Redeem code for 15 Minutes of 2x Experience
     """
     context.bot.send_message(chat_id=update.effective_chat.id, text=codes_text)
 
@@ -44,17 +67,50 @@ def send_wiki_link(update, context):
 
 def send_fruit_list(update, context):
     fruits_list = """
-    Fruit    Type
-    Bomb    
-    Barrier    
-    ...
+    Fruit Type
+Bomb 
+Barrier 
+Buddha 
+Chop 
+Control 
+Dark 
+Dough 
+Dragon 
+Flame 
+Gravity 
+Gum 
+Ice 
+Kilo 
+Light 
+Love 
+Magu 
+Magma 
+Phoenix 
+Quake 
+Rumble 
+Sand 
+Smoke 
+Snow 
+Spin 
+Spring 
+Venom 
+String 
+Human 
+Giraffe 
+Leopard 
+Wolf 
+Paw 
+Door 
+Spike 
+Rocket 
+Bird
     """
     context.bot.send_message(chat_id=update.effective_chat.id, text=fruits_list)
 
 def remind_halal(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Stay halal, brother!")
 
-# Register command handlers
+# Register the command handlers
 updater.dispatcher.add_handler(CommandHandler("start", start))
 updater.dispatcher.add_handler(CommandHandler("help", help_command))
 updater.dispatcher.add_handler(CommandHandler("hi", say_hi))
