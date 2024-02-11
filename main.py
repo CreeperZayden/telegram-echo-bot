@@ -1,4 +1,5 @@
-from python-telegram-bot import Bot, Dispatcher, executor, types
+from telegram import Bot, Dispatcher, types
+from telegram.ext import executor
 import os
 from keep_alive import keep_alive
 keep_alive()
