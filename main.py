@@ -126,7 +126,7 @@ updater.dispatcher.add_handler(CommandHandler("wiki", send_wiki_link))
 updater.dispatcher.add_handler(CommandHandler("list", send_fruit_list))
 updater.dispatcher.add_handler(CommandHandler("sex", remind_halal))
 
-def main():
+if __name__ == '__main__':
     try:
         # Start the bot
         updater.start_polling()
@@ -134,9 +134,6 @@ def main():
         # Run the bot until you press Ctrl-C or the service fails
         updater.idle()
     except Exception as e:
-        logger.error(f"An error occurred: {e}")
+        logger.error(f"An error occurred: {e}", exc_info=True)  # Log the full exception traceback
         updater.stop()
         updater.is_idle = False  # Ensure the updater loop exits
-
-if __name__ == '__main__':
-    main()
