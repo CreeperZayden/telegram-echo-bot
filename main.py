@@ -6,7 +6,7 @@ from keep_alive import keep_alive
 
 # Initialize the bot and dispatcher
 bot = Bot(token=os.environ.get('token'))
-dp = Dispatcher(bot)
+dp = Dispatcher(bot, update_queue=asyncio.Queue())
 
 # Define your command handlers
 async def start(update, context):
