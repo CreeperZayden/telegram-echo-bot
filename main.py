@@ -1,109 +1,71 @@
 import os
-import asyncio
-from telegram import Bot
-from telegram.ext import Dispatcher, Updater, CommandHandler
-from keep_alive import keep_alive
+from telegram.ext import Updater, CommandHandler
 
-# Initialize the bot and dispatcher
-bot = Bot(token=os.environ.get('token'))
-dp = Dispatcher(bot, update_queue=asyncio.Queue())
+# Initialize the bot
+updater = Updater(token=os.environ.get('YOUR_BOT_TOKEN'), use_context=True)
 
-# Define your command handlers
-async def start(update, context):
-    username = update.message.from_user.username
-    await update.message.reply(f"Hello {username}!")
+# Define command handlers
+def start(update, context):
+    user = update.message.from_user
+    context.bot.send_message(chat_id=update.effective_chat.id, text=f"Hi {user.first_name}!")
 
-async def help(update, context):
-    commands = "/start - say hi with the telegram username\n"
-    commands += "/list - show list of fruit types\n"
-    commands += "/wiki - provide a link to the Blox Fruits wiki\n"
-    commands += "/codes - show redeem codes for Blox Fruits"
-    await update.message.reply(commands)
-
-async def list_fruits(update, context):
-    fruit_list = """Fruit Type
-Bomb 
-Barrier 
-Buddha 
-Chop 
-Control 
-Dark 
-Dough 
-Dragon 
-Flame 
-Gravity 
-Gum 
-Ice 
-Kilo 
-Light 
-Love 
-Magu 
-Magma 
-Phoenix 
-Quake 
-Rumble 
-Sand 
-Smoke 
-Snow 
-Spin 
-Spring 
-Venom 
-String 
-Human 
-Giraffe 
-Leopard 
-Wolf 
-Paw 
-Door 
-Spike 
-Rocket 
-Bird
+def help_command(update, context):
+    available_commands = """
+    Available commands:
+    /start - Start the bot
+    /help - Display available commands
+    /hi - Say hi to the bot
+    /halal - Greet with Assalamualaikum
+    /codes - Get codes
+    /wiki - Get Wiki link
+    /list - Get list of fruits
+    /sex - Remind to stay halal
     """
-    await update.message.reply(fruit_list)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=available_commands)
 
-async def wiki(update, context):
-    wiki_link = "https://blox-fruits.fandom.com/wiki/Blox_Fruits"
-    await update.message.reply(wiki_link)
+def say_hi(update, context):
+    user = update.message.from_user
+    context.bot.send_message(chat_id=update.effective_chat.id, text=f"Hello, {user.first_name}!")
 
-async def codes(update, context):
-    codes_list = """NEWTROLL: Redeem for a 20 minutes of 2x EXP Boost
+def greet_with_assalamualaikum(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Assalamualaikum, my brother/sister!")
+
+def send_codes(update, context):
+    codes_text = """
+    NEWTROLL: Redeem for a 20 minutes of 2x EXP Boost
     KITT_RESET: Redeem for a Stat Refund or Reset
-    Sub2CaptainMaui: Redeem for 20 minutes of 2x EXP Boost
-    SUB2GAMERROBOT_RESET1: Redeem for a free Stat Reset
-    kittgaming: Redeem for 20 minutes of 2x EXP Boost
-    Sub2Fer999: Redeem for 20 minutes of 2x EXP Boost
-    Enyu_is_Pro: Redeem for 20 minutes of 2x EXP Boost
-    Magicbus: Redeem for 20 minutes of 2x EXP Boost
-    JCWK: Redeem for 20 minutes of 2x EXP Boost
-    Starcodeheo: Redeem for 20 minutes of 2x EXP Boost
-    Bluxxy: Redeem for a Boost
-    fudd10_v2: Redeem code for 2 Beli
-    FUDD10: Redeem code for $1
-    BIGNEWS: Redeem code for an in-game title
-    THEGREATACE: Redeem code for 20 Minutes of 2x Experience
-    SUB2GAMERROBOT_EXP1: Redeem for 30 Minutes of 2x Experience
-    Sub2OfficialNoobie: Redeem code for 20 Minutes of 2x Experience
-    StrawHatMaine: Redeem for 20 minutes of 2x Experience
-    SUB2NOOBMASTER123: Redeem code for 15 Minutes of 2x Experience
-    Sub2UncleKizaru: Redeem code for a Stat Refund
-    Sub2Daigrock: Redeem code for 15 Minutes of 2x Experience
-    Axiore: Redeem code for 20 Minutes of 2x Experience
-    TantaiGaming: Redeem code for 15 Minutes of 2x Experience
+    ...
     """
-    await update.message.reply(codes_list)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=codes_text)
 
-# Register your command handlers with the dispatcher
-dp.add_handler(CommandHandler("start", start))
-dp.add_handler(CommandHandler("help", help))
-dp.add_handler(CommandHandler("list", list_fruits))
-dp.add_handler(CommandHandler("wiki", wiki))
-dp.add_handler(CommandHandler("codes", codes))
+def send_wiki_link(update, context):
+    wiki_link = "https://blox-fruits.fandom.com/wiki/Blox_Fruits"
+    context.bot.send_message(chat_id=update.effective_chat.id, text=wiki_link)
+
+def send_fruit_list(update, context):
+    fruits_list = """
+    Fruit    Type
+    Bomb    
+    Barrier    
+    ...
+    """
+    context.bot.send_message(chat_id=update.effective_chat.id, text=fruits_list)
+
+def remind_halal(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Stay halal, brother!")
+
+# Register command handlers
+updater.dispatcher.add_handler(CommandHandler("start", start))
+updater.dispatcher.add_handler(CommandHandler("help", help_command))
+updater.dispatcher.add_handler(CommandHandler("hi", say_hi))
+updater.dispatcher.add_handler(CommandHandler("halal", greet_with_assalamualaikum))
+updater.dispatcher.add_handler(CommandHandler("codes", send_codes))
+updater.dispatcher.add_handler(CommandHandler("wiki", send_wiki_link))
+updater.dispatcher.add_handler(CommandHandler("list", send_fruit_list))
+updater.dispatcher.add_handler(CommandHandler("sex", remind_halal))
 
 # Start the bot
-async def main():
-    await bot.delete_webhook()
-    await dp.start_polling()
+updater.start_polling()
 
-if __name__ == '__main__':
-    keep_alive()
-    asyncio.run(main())
+# Run the bot until you press Ctrl-C
+updater.idle()
