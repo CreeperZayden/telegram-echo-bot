@@ -1,5 +1,11 @@
 import os
 from telegram.ext import Updater, CommandHandler
+import logging
+
+# Set up logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Get your bot token from environment variables
 token = os.environ.get('token')
@@ -110,7 +116,7 @@ Bird
 def remind_halal(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Stay halal, brother!")
 
-# Register the command handlers
+# Register command handlers
 updater.dispatcher.add_handler(CommandHandler("start", start))
 updater.dispatcher.add_handler(CommandHandler("help", help_command))
 updater.dispatcher.add_handler(CommandHandler("hi", say_hi))
@@ -120,8 +126,17 @@ updater.dispatcher.add_handler(CommandHandler("wiki", send_wiki_link))
 updater.dispatcher.add_handler(CommandHandler("list", send_fruit_list))
 updater.dispatcher.add_handler(CommandHandler("sex", remind_halal))
 
-# Start the bot
-updater.start_polling()
+def main():
+    try:
+        # Start the bot
+        updater.start_polling()
 
-# Run the bot until you press Ctrl-C
-updater.idle()
+        # Run the bot until you press Ctrl-C or the service fails
+        updater.idle()
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
+        updater.stop()
+        updater.is_idle = False  # Ensure the updater loop exits
+
+if __name__ == '__main__':
+    main()
